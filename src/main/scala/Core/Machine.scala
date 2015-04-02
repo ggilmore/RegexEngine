@@ -1,6 +1,5 @@
-/**
- * Created by gmgilmore on 3/31/15.
- */
+package Core
+
 
 
 /**
@@ -28,13 +27,15 @@ object Machine {
 
   /**
    * Generates a machine that matches a single character 'char'
-   * @param char the character that we want to match
+   * @param singleCharString the character that we want to match
    * @return a machine that matches 'char' and nothing else
    */
-  def singleChar(char: Char): Machine = {
+  def singleChar(singleCharString: String): Machine = {
+    require(singleCharString.length == 1)
+    val char = singleCharString.charAt(0)
     val newInitial = State(s"initial state for singleChar $char.")
     val newFinal = State(s"final state for singleChar $char.")
-    val dTransitions = Map(newInitial -> Map(char, Set(newFinal)))
+    val dTransitions = Map(newInitial -> Map(char -> Set(newFinal)))
     Machine(newInitial, newFinal, Map(), dTransitions)
   }
 
