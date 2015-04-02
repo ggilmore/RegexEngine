@@ -5,24 +5,24 @@
 
 /**
  * 
- * @param descr a description for what this state represents.
+ * @param descr a description of what this state represents.
  */
 case class State(descr:String)
 
 
 /**
- * A class the represents a series of states that is designed to test input strings to see if they match the regex that 
- * this class represents (and no other regex). 
+ * A class that represents a series of states and transitions from one state to another that is designed to test
+ * input strings to see if they match the regex that this class is supposed to represent (and no other regex).
  * 
  * @param initialState the initial "start" state of this machine. 
  * @param finalState the final "matching" state of this matchine
  * @param nTransitions describes transitions from one state to another state that aren't contingent on any particular 
  *                     character
- * @param dtransitions describes transitions from one state to another state that are contingent on a particular 
+ * @param dTransitions describes transitions from one state to another state that are contingent on a particular
  *                     character
  */
 case class Machine(initialState:State, finalState:State, nTransitions:Map[State, Set[State]],
-                   dtransitions: Map[State, Map[Char, Set[State]]])
+                   dTransitions: Map[State, Map[Char, Set[State]]])
 
 object Machine {
 
@@ -53,7 +53,7 @@ object Machine {
       secondMachine.finalState -> Set(newFinal), newInitial -> Set(secondMachine.initialState))
 
     Machine(newInitial, newFinal, firstMachine.nTransitions ++ secondMachine.nTransitions ++ newNTrans,
-      firstMachine.dtransitions ++ secondMachine.dtransitions)
+      firstMachine.dTransitions ++ secondMachine.dTransitions)
   }
 
   /**
@@ -71,7 +71,7 @@ object Machine {
       secondMachine.finalState -> Set(newFinal))
 
     Machine(newInitial, newFinal, firstMachine.nTransitions ++ secondMachine.nTransitions ++ newNTrans,
-      firstMachine.dtransitions ++ secondMachine.dtransitions)
+      firstMachine.dTransitions ++ secondMachine.dTransitions)
   }
 
   /**
@@ -86,7 +86,7 @@ object Machine {
     val newNTrans = Seq(newInitial -> Set(target.initialState), target.finalState -> Set(newFinal),
       target.finalState -> Set(target.initialState))
 
-    Machine(newInitial, newFinal, target.nTransitions ++ newNTrans, target.dtransitions)
+    Machine(newInitial, newFinal, target.nTransitions ++ newNTrans, target.dTransitions)
   }
 
   /**
@@ -102,7 +102,7 @@ object Machine {
     val newNTrans = Seq(newInitial -> Set(target.initialState), target.finalState -> Set(newFinal),
       newInitial -> Set(newFinal))
 
-    Machine(newInitial, newFinal, target.nTransitions ++ newNTrans, target.dtransitions)
+    Machine(newInitial, newFinal, target.nTransitions ++ newNTrans, target.dTransitions)
   }
 
 
@@ -117,6 +117,6 @@ object Machine {
     val prevTranstions:Set[State] = tempMachine.nTransitions(tempMachine.initialState)
     Machine(tempMachine.initialState, tempMachine.finalState,
       tempMachine.nTransitions + (tempMachine.initialState -> (prevTranstions + tempMachine.finalState)) ,
-      tempMachine.dtransitions)
+      tempMachine.dTransitions)
   }
 }
