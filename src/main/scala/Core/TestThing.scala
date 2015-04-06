@@ -8,8 +8,9 @@ import Core.Machine._
 
 
 object TestThing extends App{
- val myP = new RegexParser("""(a|b)?""")
+ val myP = new RegexParser("""a**""")
   println(myP.parse)
+
 
 }
 

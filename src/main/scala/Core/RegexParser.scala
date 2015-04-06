@@ -18,15 +18,15 @@ class RegexParser(val tokens:String) {
    * Grammar (as seen from matt might)
    *
    * <regex> ::= <term> '|' <regex>
-   *        |  <term>
+   *        ::=  <term>
    *
-   *<term> ::= { <factor> }
+   *<term> ::= <factor>+
    *
    *<factor> ::= <base> ('*'| '?'|'+')?
    *
    *<base> ::= <char>
-   *        |  '\' <char>
-   *        |  '(' <regex> ')'
+   *        ::=  '\' <char>
+   *        ::= '(' <regex> ')'
    */
 
   private def parseRegex:Machine = {
@@ -42,11 +42,12 @@ class RegexParser(val tokens:String) {
   }
 
   private def parseTerm:Machine = {
-    val factor = parseFactor
-    if (!this.end && this.peek != Some("|") && this.peek != Some(")")) {
-      and(factor, parseTerm)
+    var factor = parseFactor
+    while (!this.end && this.peek != Some("|") && this.peek != Some(")")) {
+      val nextFactor = parseFactor
+      factor = and(factor, nextFactor)
     }
-    else factor
+    factor
   }
 
   private def parseFactor:Machine = {
@@ -55,14 +56,17 @@ class RegexParser(val tokens:String) {
       this.peek match {
         case Some("*") => {
           this.next
+          if (this.peek == Some("*")) throw new Exception(s"double *'s")
           someOrNone(base)
         }
         case Some("+") => {
           this.next
+          if (this.peek == Some("+")) throw new Exception(s"double +'s")
           oneOrMore(base)
         }
         case Some("?") => {
           this.next
+          if (this.peek == Some("?")) throw new Exception(s"double ?'s")
           zeroOrOne(base)
         }
         case _ => base
@@ -86,7 +90,6 @@ class RegexParser(val tokens:String) {
           throw new Exception("closing parens not found")
         }
       }
-
       case Some("""\""") => {
         this.next
         parseBase
