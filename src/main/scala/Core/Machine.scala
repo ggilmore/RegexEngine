@@ -1,14 +1,12 @@
 package Core
 
-import java.io.File
 import java.util.UUID
 
 
 /**
- * 
- * @param descr a description of what this state represents.
+ * @param description a description of what this state represents.
  */
-case class State(descr:String){
+case class State(description:String){
   val id:UUID = UUID.randomUUID
 }
 
@@ -18,7 +16,7 @@ case class State(descr:String){
  * input strings to see if they match the regex that this class is supposed to represent (and no other regex).
  * 
  * @param initialState the initial "start" state of this machine. 
- * @param finalState the final "matching" state of this matchine
+ * @param finalState the final "matching" state of this machine.
  * @param nTransitions describes transitions from one state to another state that aren't contingent on any particular 
  *                     character
  * @param dTransitions describes transitions from one state to another state that are contingent on a particular
