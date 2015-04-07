@@ -38,7 +38,7 @@ object Machine {
    * @return a string that is a properly formatted DOT representation of this machine, with nodes being states and
    *         nTransition
    *         key-value pairs as unlabeled edges and dTransition key-value paris being labeled with the character that
-   *         is the transition is contingent on
+   *         the transition is contingent on
    */
   def toDOTFileFormat(machine:Machine):String = {
     val builder = new StringBuilder
