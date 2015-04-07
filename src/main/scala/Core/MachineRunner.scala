@@ -1,13 +1,16 @@
 package Core
 
+import scala.annotation.tailrec
+
 /**
  * Created by gmgilmore on 4/2/15.
  */
 object MachineRunner {
 
   def nextStep(input:Char, machine: Machine, validStates: Set[State]):Set[State] = {
+
     def handleNTransitions(beforeStates:Set[State]):Set[State] = {
-      println(s"initial: $beforeStates")
+      @tailrec
       def loop(beforeStates:Set[State]):Set[State] = {
         val newStates = beforeStates.foldLeft(Set[State]()){case (set, state) => {
           if (machine.nTransitions.contains(state)) set ++ machine.nTransitions(state)
@@ -16,19 +19,20 @@ object MachineRunner {
         if (newStates == beforeStates) newStates else loop(newStates)
       }
       val finalStates = loop(beforeStates)
-      println(s"final: $finalStates")
       finalStates
     }
+
     def handleDTransitions(beforeStates:Set[State]):Set[State] = {
       beforeStates.foldLeft(Set[State]()){case (set, state) => {
-        if (machine.dTransitions.contains(state)) {
-          if (machine.dTransitions(state).contains(input)) set ++ machine.dTransitions(state)(input)
-          else set
-        }
+        if (machine.dTransitions.contains(state) && machine.dTransitions(state).contains(input)) set ++ machine.dTransitions(state)(input)
         else set
       }}
     }
-    handleNTransitions(handleDTransitions(handleNTransitions(validStates)))
+    val firstRoundNTransitions = handleNTransitions(validStates)
+    val allDTransitions = handleDTransitions(firstRoundNTransitions)
+    val lastRoundNTransitions = handleNTransitions(allDTransitions)
+    lastRoundNTransitions
+
   }
 
   def testInput(machine:Machine, inputString:String) = {
@@ -36,8 +40,7 @@ object MachineRunner {
       if (testStr.isEmpty) validStates
       else loop(testStr.drop(1), nextStep(testStr.charAt(0), machine, validStates))
     }
-    val finalStates = loop(inputString, Set(machine.finalState))
-    finalStates.foreach(x => println(x))
+    val finalStates = loop(inputString, Set(machine.initialState))
     finalStates.contains(machine.finalState)
   }
 

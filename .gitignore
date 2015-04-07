@@ -24,6 +24,7 @@
 # .idea/gradle.xml
 # .idea/libraries
 
+src/main/scala/Junk
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
 

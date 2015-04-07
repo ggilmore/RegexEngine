@@ -32,7 +32,15 @@ case class Machine(initialState:State, finalState:State, nTransitions:Map[State,
 
 object Machine {
 
-  def toDot(machine:Machine):String = {
+  /**
+   * Generates a DOT Format representation of Machine "machine"
+   * @param machine the machine that we are making the representation of
+   * @return a string that is a properly formatted DOT representation of this machine, with nodes being states and
+   *         nTransition
+   *         key-value pairs as unlabeled edges and dTransition key-value paris being labeled with the character that
+   *         is the transition is contingent on
+   */
+  def toDOTFileFormat(machine:Machine):String = {
     val builder = new StringBuilder
 
     def genMap:Map[UUID, Int] = {
@@ -43,20 +51,25 @@ object Machine {
     }
     val idIntMap = genMap
 
-
     builder.append(s"digraph MACHINE {\n")
     machine.nTransitions.foreach { case (state, set) =>
-      set.foreach { case state2 => builder.append(s"""${if (state == machine.initialState) "START" else idIntMap(state.id)} -> ${if (state2 == machine.finalState) "FINAL" else idIntMap(state2.id)};"""+"\n") }
+      set.foreach { case state2 =>
+        builder.append(s"""${if (state == machine.initialState) """START""" else s"""${idIntMap(state.id)}"""} -> ${if (state2 == machine.finalState) """FINAL""" else idIntMap(state2.id)};"""+"\n") }
     }
 
     machine.dTransitions.foreach { case (state, map) => map.foreach { case (char, set) =>
-      set.foreach { case state2 => builder.append(s"""${if (state == machine.initialState) "START" else idIntMap(state.id)} -> ${if (state2 == machine.finalState) "FINAL" else idIntMap(state2.id)} [ label = "$char"];""" + "\n")}}}
+      set.foreach { case state2 =>
+        builder.append(s"""${if (state == machine.initialState) "START" else s"""${idIntMap(state.id)}"""} -> ${if (state2 == machine.finalState) """FINAL"""else idIntMap(state2.id)} [ label = "$char"];""" + "\n")}}}
 
+    machine.states.foreach{case state =>
+      if (state != machine.initialState && state !=machine.finalState) builder.append(s"""${idIntMap(state.id)} [label = "", shape = "circle"];""" + "\n")}
+
+    builder.append(s"""START [shape= "circle"];"""+"\n")
+    builder.append(s"""FINAL [shape= "doublecircle"]; """+"\n")
     builder.append( "}\n")
+
     builder.toString
   }
-
-
 
   /**
    * Generates a machine that matches a single character 'char'
