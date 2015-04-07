@@ -8,8 +8,16 @@ import Core.Machine._
 
 
 object TestThing extends App{
- val myP = new RegexParser("""a**""")
-  println(myP.parse)
+ new RegexParser("""(a|b+)""").parse match {
+   case Some(m) => {
+     println(Machine.toDot(m))
+     println(MachineRunner.testInput(m,"a"))
+   }
+
+   case None => println("invalid regex")
+ }
+
+
 
 
 }
