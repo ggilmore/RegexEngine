@@ -1,22 +1,23 @@
 package Core
 
+
 import java.util.UUID
 
 
 /**
+ *
  * @param description a description of what this state represents.
  */
-case class State(description:String){
-  val id:UUID = UUID.randomUUID
-}
+case class State(description:String, id:UUID  = UUID.randomUUID)
+
 
 
 /**
  * A class that represents a series of states and transitions from one state to another that is designed to test
  * input strings to see if they match the regex that this class is supposed to represent (and no other regex).
- * 
+ *
  * @param initialState the initial "start" state of this machine. 
- * @param finalState the final "matching" state of this machine.
+ * @param finalState the final "matching" state of this machine
  * @param nTransitions describes transitions from one state to another state that aren't contingent on any particular 
  *                     character
  * @param dTransitions describes transitions from one state to another state that are contingent on a particular
@@ -41,26 +42,28 @@ object Machine {
   def toDOTFileFormat(machine:Machine):String = {
     val builder = new StringBuilder
 
-    def genMap:Map[UUID, Int] = {
+    def genMap:Map[State, Int] = {
       var num = 0
-      machine.states.foldLeft(Map[UUID, Int]()){case (map, state) => {
+      machine.states.foldLeft(Map[State, Int]()){case (map, state) => {
         num = num + 1
-        map + (state.id -> num)}}
+        map + (state-> num)}}
     }
     val idIntMap = genMap
+    machine.states.foreach(state => println(s"${state.id} $state "))
+    println(idIntMap)
 
     builder.append(s"digraph MACHINE {\n")
     machine.nTransitions.foreach { case (state, set) =>
       set.foreach { case state2 =>
-        builder.append(s"""${if (state == machine.initialState) """START""" else s"""${idIntMap(state.id)}"""} -> ${if (state2 == machine.finalState) """FINAL""" else idIntMap(state2.id)};"""+"\n") }
+        builder.append(s"""${if (state == machine.initialState) """START""" else s"""${idIntMap(state)}"""} -> ${if (state2 == machine.finalState) """FINAL""" else idIntMap(state2)};"""+"\n") }
     }
 
     machine.dTransitions.foreach { case (state, map) => map.foreach { case (char, set) =>
       set.foreach { case state2 =>
-        builder.append(s"""${if (state == machine.initialState) "START" else s"""${idIntMap(state.id)}"""} -> ${if (state2 == machine.finalState) """FINAL"""else idIntMap(state2.id)} [ label = "$char"];""" + "\n")}}}
+        builder.append(s"""${if (state == machine.initialState) "START" else s"""${idIntMap(state)}"""} -> ${if (state2 == machine.finalState) """FINAL"""else idIntMap(state2)} [ label = "$char"];""" + "\n")}}}
 
     machine.states.foreach{case state =>
-      if (state != machine.initialState && state !=machine.finalState) builder.append(s"""${idIntMap(state.id)} [label = "", shape = "circle"];""" + "\n")}
+      if (state != machine.initialState && state !=machine.finalState) builder.append(s"""${idIntMap(state)} [label = "", shape = "circle"];""" + "\n")}
 
     builder.append(s"""START [shape= "circle"];"""+"\n")
     builder.append(s"""FINAL [shape= "doublecircle"]; """+"\n")
@@ -94,8 +97,8 @@ object Machine {
     val newInitial: State = State(s"initial state for OR of $firstMachine and $secondMachine.")
     val newFinal: State = State(s"final state for OR of $firstMachine and $secondMachine.")
 
-    val newNTrans = Seq(firstMachine.finalState -> Set(newFinal), newInitial -> Set(secondMachine.initialState, firstMachine.initialState),
-      secondMachine.finalState -> Set(newFinal))
+    val newNTrans = Seq(firstMachine.finalState -> Set(newFinal), newInitial -> Set(secondMachine.initialState,
+      firstMachine.initialState), secondMachine.finalState -> Set(newFinal))
 
     Machine(newInitial, newFinal, firstMachine.nTransitions ++ secondMachine.nTransitions ++ newNTrans,
       firstMachine.dTransitions ++ secondMachine.dTransitions)
@@ -148,7 +151,6 @@ object Machine {
     Machine(newInitial, newFinal, target.nTransitions ++ newNTrans, target.dTransitions)
   }
 
-
   /**
    *
    * @param target the machine that we want to create the "oneOrMore" out of
@@ -157,9 +159,9 @@ object Machine {
    */
   def someOrNone(target: Machine): Machine = {
    val tempMachine = oneOrMore(target)
-    val prevTranstions:Set[State] = tempMachine.nTransitions(tempMachine.initialState)
+    val prevTransitions:Set[State] = tempMachine.nTransitions(tempMachine.initialState)
     Machine(tempMachine.initialState, tempMachine.finalState,
-      tempMachine.nTransitions + (tempMachine.initialState -> (prevTranstions + tempMachine.finalState)) ,
+      tempMachine.nTransitions + (tempMachine.initialState -> (prevTransitions + tempMachine.finalState)) ,
       tempMachine.dTransitions)
   }
 }

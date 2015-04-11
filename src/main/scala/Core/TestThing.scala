@@ -8,16 +8,14 @@ import Core.Machine._
 
 
 object TestThing extends App{
- new RegexParser("""((a*)?|b)?c+d""").parse match {
+ new RegexParser("""(w?)+""").parse match {
    case Some(m) => {
      println(Machine.toDOTFileFormat(m))
-     println(MachineRunner.testInput(m,"bcccd"))
+     println(MachineRunner.testInput(m, "wwwww"))
+//     println(MachineRunner.testInput(m,"d"))
    }
    case None => println("invalid regex")
  }
-
-
-
 
 }
 

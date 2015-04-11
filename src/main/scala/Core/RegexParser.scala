@@ -22,11 +22,14 @@ class RegexParser(val tokens:String) {
    *
    *<term> ::= <factor>+
    *
-   *<factor> ::= <base> ('*'| '?'|'+')?
+   *<factor> ::= <factor> ('*'| '?'|'+')?
+   *         ::= <base> ('*'| '?'|'+')?
    *
    *<base> ::= <char>
    *        ::=  '\' <char>
    *        ::= '(' <regex> ')'
+   *
+   *
    */
 
   private def parseRegex:Machine = {
