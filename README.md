@@ -32,4 +32,4 @@ of that machine using the [DOT graph description language](https://en.wikipedia.
 This graph has nodes as states, unlabeled edges representing transitions that aren't contingent on any character, and labeled edges 
 representing transitions that are contingent on the character that the edge is labeled with. 
   
-###Example of a graph generated from `toDOTFileFormat`'s output from the regex `((ab|b?)*w)`: ![example](http://i.imgur.com/KolYNn3.png)
+Example of a graph generated from `toDOTFileFormat`'s output from the regex `((ab|b?)*w)`: ![example](http://i.imgur.com/KolYNn3.png)
