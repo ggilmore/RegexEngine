@@ -30,5 +30,5 @@ The `MachineRunner` object has a method called `testInput` that takes a `Machine
 The `Machine` companion object also has a helper function, called `toDOTFileFormat` that takes a `Machine`, and returns a representation 
 of that machine using the [DOT graph description language](https://en.wikipedia.org/wiki/DOT_%28graph_description_language%29).
 This graph has nodes as states, unlabeled edges representing transitions that aren't contingent on any character, and labeled edges 
-representing transitions that are contingent on the character edge is labeled with. 
+representing transitions that are contingent on the character that the edge is labeled with. 
   
