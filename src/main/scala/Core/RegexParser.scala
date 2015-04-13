@@ -59,17 +59,17 @@ class RegexParser(val tokens:String) {
       this.peek match {
         case Some("*") => {
           this.next
-          if (this.peek == Some("*")) throw new Exception(s"double *'s")
+          if (this.peek == Some("*") | this.peek ==Some("+") | this.peek==Some("?")) throw new Exception(s"double operators")
           someOrNone(base)
         }
         case Some("+") => {
           this.next
-          if (this.peek == Some("+")) throw new Exception(s"double +'s")
+          if (this.peek == Some("+") | this.peek ==Some("*") | this.peek==Some("?")) throw new Exception(s"double operators")
           oneOrMore(base)
         }
         case Some("?") => {
           this.next
-          if (this.peek == Some("?")) throw new Exception(s"double ?'s")
+          if (this.peek == Some("?") | this.peek ==Some("*") | this.peek==Some("+")) throw new Exception(s"double operators's")
           zeroOrOne(base)
         }
         case _ => base

@@ -7,6 +7,7 @@ import java.util.UUID
 /**
  *
  * @param description a description of what this state represents.
+ * @param id a unique identifier for this State instance
  */
 case class State(description:String, id:UUID  = UUID.randomUUID)
 

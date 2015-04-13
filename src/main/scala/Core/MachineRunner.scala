@@ -17,27 +17,32 @@ object MachineRunner {
    */
   def nextStep(input: Char, machine: Machine, validStates: Set[State]): Set[State] = {
 
+    /**
+     * Generates a new set of valid states using the non deterministic transitions that are dictated by the machine
+     * @param beforeStates the set of valid
+     * @return
+     */
     def handleNTransitions(beforeStates: Set[State]): Set[State] = {
       @tailrec
       def loop(beforeStates: Set[State], visitedSet:Set[State]): Set[State] = {
-        val newStates = beforeStates.foldLeft((Set[State](), visitedSet)) { case ((newStatesSet, newVisitedSet), state) => {
+        val (newStates, newVisitedStates) = beforeStates.foldLeft((Set[State](), visitedSet)) { case ((newStatesSet, newVisitedSet), state) => {
           if (newVisitedSet.contains(state)) (newStatesSet + state, newVisitedSet)
           else if (machine.nTransitions.contains(state)) (newStatesSet union machine.nTransitions(state), newVisitedSet + state)
           else (newStatesSet + state, newVisitedSet + state)
         }
         }
-        if (newStates._1 == beforeStates) newStates._1
-        else {
-          println(s"New states ${newStates._1.size}")
-          loop(newStates._1, visitedSet union newStates._2 )
-        }
+        if (newStates == beforeStates) newStates else loop(newStates, visitedSet union newVisitedStates)
       }
       val finalStates = loop(beforeStates, Set())
       finalStates
     }
 
+    /**
+     * Generates a new set of valid states using the transitions on a particular character, as dictated by the machine
+     * @param beforeStates
+     * @return
+     */
     def handleDTransitions(beforeStates: Set[State]): Set[State] = {
-      println("In handleDTransitions.")
       beforeStates.foldLeft(Set[State]()) { case (newStates, state) => {
         if (machine.dTransitions.contains(state) && machine.dTransitions(state).contains(input))
           newStates ++ machine.dTransitions(state)(input)
@@ -58,6 +63,7 @@ object MachineRunner {
    * @return true if "inputString" matches the regex described by the machine, false otherwise
    */
   def testInput(machine: Machine, inputString: String): Boolean = {
+    @tailrec
     def loop(testStr: String, validStates: Set[State]): Set[State] = {
       if (testStr.isEmpty) validStates
       else loop(testStr.drop(1), nextStep(testStr.charAt(0), machine, validStates))
