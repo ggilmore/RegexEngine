@@ -32,4 +32,4 @@ of that machine using the [DOT graph description language](https://en.wikipedia.
 This graph has nodes as states, unlabeled edges representing transitions that aren't contingent on any character, and labeled edges 
 representing transitions that are contingent on the character that the edge is labeled with. 
   
-Example of a graph generated from `toDOTFileFormat`'s output: ![example](https://dl-web.dropbox.com/get/Screenshots/Screenshot%202015-04-13%2017.15.07.png?_subject_uid=559349&w=AAC-safk7iRQxtYpNHPqhRt0XgFeHN76r99yifZmxLNz-Q)
+Example of a graph generated from `toDOTFileFormat`'s output: ![example](http://i.imgur.com/KolYNn3.png)
