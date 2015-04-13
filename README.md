@@ -1,7 +1,7 @@
 # RegexEngine
 
 ##Intro: 
-This is a simple regex engine that I made following [this article](http://perl.plover.com/Regex/article.html). 
+This is a simple regex engine written in Scala that I made following [this article](http://perl.plover.com/Regex/article.html). 
 
 ##Supported Grammar: 
 ([borrowed and modified from Matt Might](http://matt.might.net/articles/parsing-regex-with-recursive-descent/))
