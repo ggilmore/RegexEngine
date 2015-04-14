@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Regexengine by ggilmore</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Regexengine</h1>
+        <p></p>
+
+        <p class="view"><a href="https://github.com/ggilmore/RegexEngine">View the Project on GitHub <small>ggilmore/RegexEngine</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/ggilmore/RegexEngine/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/ggilmore/RegexEngine/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/ggilmore/RegexEngine">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="regexengine" class="anchor" href="#regexengine" aria-hidden="true"><span class="octicon octicon-link"></span></a>RegexEngine</h1>
+
+<h2>
+<a id="intro" class="anchor" href="#intro" aria-hidden="true"><span class="octicon octicon-link"></span></a>Intro:</h2>
+
+<p>This is a simple regex engine written in Scala that I made following <a href="http://perl.plover.com/Regex/article.html">this article</a>. </p>
+
+<h2>
+<a id="supported-grammar" class="anchor" href="#supported-grammar" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supported Grammar:</h2>
+
+<p>(<a href="http://matt.might.net/articles/parsing-regex-with-recursive-descent/">borrowed and modified from Matt Might</a>)</p>
+
+<pre><code> &lt;regex&gt; ::= &lt;term&gt; '|' &lt;regex&gt;
+         ::=  &lt;term&gt;
+
+ &lt;term&gt; ::= &lt;factor&gt;+
+
+ &lt;factor&gt; ::= &lt;factor&gt; ('*'| '?'|'+')?
+         ::= &lt;base&gt; ('*'| '?'|'+')?
+
+ &lt;base&gt;  ::= &lt;char&gt;
+         ::=  '\' &lt;char&gt;
+         ::= '(' &lt;regex&gt; ')'
+</code></pre>
+
+<h2>
+<a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic Usage:</h2>
+
+<p>The <code>RegexParser</code> class is used to parse a string that represents a regex. Create a new <code>RegexParser</code> instance and use its <code>parse()</code>
+method in order to create a <a href="https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton">Machine</a> instance that represents that
+regex. </p>
+
+<p>The <code>MachineRunner</code> object has a method called <code>testInput</code> that takes a <code>Machine</code> and some <code>inputString</code> and returns <code>true</code> if the
+<code>inputString</code> matches the regex that the <code>Machine</code> represents, and false otherwise. </p>
+
+<p>The <code>Machine</code> companion object also has a helper function, called <code>toDOTFileFormat</code> that takes a <code>Machine</code>, and returns a string representation 
+of that machine using the <a href="https://en.wikipedia.org/wiki/DOT_%28graph_description_language%29">DOT graph description language</a>.
+This graph has nodes as states, unlabeled edges representing transitions that aren't contingent on any character, and labeled edges 
+representing transitions that are contingent on the character that the edge is labeled with. </p>
+
+<p>Example of a graph generated from <code>toDOTFileFormat</code>'s output from the regex <code>((ab|b?)*w)</code>: <img src="http://i.imgur.com/KolYNn3.png" alt="example"></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/ggilmore">ggilmore</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
