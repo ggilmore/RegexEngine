@@ -27,8 +27,9 @@ regex.
 The `MachineRunner` object has a method called `testInput` that takes a `Machine` and some `inputString` and returns `true` if the
 `inputString` matches the regex that the `Machine` represents, and false otherwise. 
 
-The `Machine` companion object also has a helper function, called `toDOTFileFormat` that takes a `Machine`, and returns a representation 
+The `Machine` companion object also has a helper function, called `toDOTFileFormat` that takes a `Machine`, and returns a string representation 
 of that machine using the [DOT graph description language](https://en.wikipedia.org/wiki/DOT_%28graph_description_language%29).
 This graph has nodes as states, unlabeled edges representing transitions that aren't contingent on any character, and labeled edges 
 representing transitions that are contingent on the character that the edge is labeled with. 
   
+Example of a graph generated from `toDOTFileFormat`'s output from the regex `((ab|b?)*w)`: ![example](http://i.imgur.com/KolYNn3.png)
