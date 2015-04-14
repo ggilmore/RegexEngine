@@ -1,5 +1,4 @@
-package Core
-
+package com.ggilmore.core
 
 import java.util.UUID
 
@@ -9,7 +8,10 @@ import java.util.UUID
  * @param description a description of what this state represents.
  * @param id a unique identifier for this State instance
  */
-case class State(description:String, id:UUID  = UUID.randomUUID)
+case class State(description:String, id:UUID  = UUID.randomUUID){
+  override def toString:String = id.toString
+}
+
 
 
 
@@ -28,6 +30,13 @@ case class Machine(initialState:State, finalState:State, nTransitions:Map[State,
                    dTransitions: Map[State, Map[Char, Set[State]]]) {
   val states:Set[State] = nTransitions.keySet union nTransitions.values.toSet.flatten union dTransitions.keySet union
     dTransitions.values.foldLeft(Set[Set[State]]()){case (set, map) => set union map.values.toSet}.flatten
+
+  private def genMap:Map[State, Int] = {
+    this.states.foldLeft((Map[State, Int](), 0)){case ((map, num), state) => {
+      (map + (state-> num), num + 1)}}._1
+  }
+
+  val idIntMap = genMap
 }
 
 object Machine {
@@ -36,42 +45,42 @@ object Machine {
    * Generates a DOT Format representation of Machine "machine"
    * @param machine the machine that we are making the representation of
    * @return a string that is a properly formatted DOT representation of this machine, with nodes being states and
-   *         nTransition
-   *         key-value pairs as unlabeled edges and dTransition key-value paris being labeled with the character that
+   *         nTransition key-value pairs as unlabeled edges and dTransition key-value pairs being edges labeled with the character that
    *         the transition is contingent on
    */
-  def toDOTFileFormat(machine:Machine):String = {
+  def toDOTFileFormat(machine:Machine, validStates:Option[Set[State]] = None):String = {
     val builder = new StringBuilder
 
-    def genMap:Map[State, Int] = {
-      var num = 0
-      machine.states.foldLeft(Map[State, Int]()){case (map, state) => {
-        num = num + 1
-        map + (state-> num)}}
-    }
-    val idIntMap = genMap
-    machine.states.foreach(state => println(s"${state.id} $state "))
-    println(idIntMap)
 
     builder.append(s"digraph MACHINE {\n")
+
     machine.nTransitions.foreach { case (state, set) =>
       set.foreach { case state2 =>
-        builder.append(s"""${if (state == machine.initialState) """START""" else s"""${idIntMap(state)}"""} -> ${if (state2 == machine.finalState) """FINAL""" else idIntMap(state2)};"""+"\n") }
+        builder.append(s"""${if (state == machine.initialState) """START""" else s"""${machine.idIntMap(state)}"""} -> ${if (state2 == machine.finalState) """FINAL""" else machine.idIntMap(state2)};"""+"\n") }
     }
 
     machine.dTransitions.foreach { case (state, map) => map.foreach { case (char, set) =>
       set.foreach { case state2 =>
-        builder.append(s"""${if (state == machine.initialState) "START" else s"""${idIntMap(state)}"""} -> ${if (state2 == machine.finalState) """FINAL"""else idIntMap(state2)} [ label = "$char"];""" + "\n")}}}
+        builder.append(s"""${if (state == machine.initialState) "START" else s"""${machine.idIntMap(state)}"""} -> ${if (state2 == machine.finalState) """FINAL"""else machine.idIntMap(state2)} [ label = "$char"];""" + "\n")}}}
 
     machine.states.foreach{case state =>
-      if (state != machine.initialState && state !=machine.finalState) builder.append(s"""${idIntMap(state)} [label = "", shape = "circle"];""" + "\n")}
+      if (state != machine.initialState && state !=machine.finalState) builder.append(s"""${machine.idIntMap(state)} [label = "", shape = "circle"];""" + "\n")}
 
     builder.append(s"""START [shape= "circle"];"""+"\n")
     builder.append(s"""FINAL [shape= "doublecircle"]; """+"\n")
+    validStates match {
+      case Some(states) => {
+        states.foreach(state => builder.append(s"""${if (state == machine.initialState) "START"
+        else if (state == machine.finalState) "FINAL"
+        else machine.idIntMap(state)} [color = "red"];""" + "\n"))
+      }
+    }
     builder.append( "}\n")
-
     builder.toString
+
   }
+
+
 
   /**
    * Generates a machine that matches a single character 'char'

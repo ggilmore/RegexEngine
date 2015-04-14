@@ -1,6 +1,7 @@
-package Core
+package com.ggilmore.core
+
 import Machine._
-import State._
+
 
 /**
  * Created by gmgilmore on 3/31/15.

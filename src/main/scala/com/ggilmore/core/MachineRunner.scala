@@ -1,4 +1,4 @@
-package Core
+package com.ggilmore.core
 
 import scala.annotation.tailrec
 
@@ -62,14 +62,16 @@ object MachineRunner {
    * @param inputString the input that we are evaluating to see if it matches the regex that is described by the machine
    * @return true if "inputString" matches the regex described by the machine, false otherwise
    */
-  def testInput(machine: Machine, inputString: String): Boolean = {
+  def testInput(machine: Machine, inputString: String): (Boolean, Seq[Set[State]]) = {
     @tailrec
-    def loop(testStr: String, validStates: Set[State]): Set[State] = {
-      if (testStr.isEmpty) validStates
-      else loop(testStr.drop(1), nextStep(testStr.charAt(0), machine, validStates))
+    def loop(testStr: String, validStates: Set[State], progression:Seq[Set[State]]): (Set[State], Seq[Set[State]]) = {
+      if (testStr.isEmpty) (validStates, progression)
+      else {
+        val newValidStates:Set[State] = nextStep(testStr.charAt(0), machine, validStates)
+        loop(testStr.drop(1), newValidStates, progression :+ newValidStates)}
     }
-    val finalStates = loop(inputString, Set(machine.initialState))
-    finalStates.contains(machine.finalState)
+    val (finalStates, progression) = loop(inputString, Set(machine.initialState), Seq(Set(machine.initialState)))
+    (finalStates.contains(machine.finalState), progression)
   }
 
 }
