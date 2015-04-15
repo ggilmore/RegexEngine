@@ -5,16 +5,16 @@ package com.ggilmore.core
  */
 
 object TestThing extends App{
- new RegexParser("""((ab|ab?))""").parse match {
+ new RegexParser("""((ab|ab?)c)""").parse match {
    case Some(m) => {
-     val result = MachineRunner.testInput(m, "ab")
+     val result = MachineRunner.testInput(m, "ac")
      println(result._1)
-     result._2.foreach(set =>println(Machine.toDOTFileFormat(m, Some(set)) + "\n ----------------\n"))
+     result._2.foreach(progWithChar =>println("Input: " + progWithChar.input + "\n" + Machine.toDOTFileFormat(m,
+       Some(progWithChar.progression)) + "\n ----------------\n"))
    }
    case None => println("invalid regex")
  }
 }
-
 
 
 
