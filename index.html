@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Regexengine by ggilmore</title>
+    <title>RegexEngine by ggilmore</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -15,7 +15,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Regexengine</h1>
+        <h1>RegexEngine</h1>
         <p></p>
 
         <p class="view"><a href="https://github.com/ggilmore/RegexEngine">View the Project on GitHub <small>ggilmore/RegexEngine</small></a></p>
@@ -44,10 +44,10 @@
 <pre><code> &lt;regex&gt; ::= &lt;term&gt; '|' &lt;regex&gt;
          ::=  &lt;term&gt;
 
- &lt;term&gt; ::= &lt;factor&gt;+
+ &lt;term&gt;  ::= &lt;factor&gt;+
 
  &lt;factor&gt; ::= &lt;factor&gt; ('*'| '?'|'+')?
-         ::= &lt;base&gt; ('*'| '?'|'+')?
+          ::= &lt;base&gt; ('*'| '?'|'+')?
 
  &lt;base&gt;  ::= &lt;char&gt;
          ::=  '\' &lt;char&gt;
@@ -70,6 +70,12 @@ This graph has nodes as states, unlabeled edges representing transitions that ar
 representing transitions that are contingent on the character that the edge is labeled with. </p>
 
 <p>Example of a graph generated from <code>toDOTFileFormat</code>'s output from the regex <code>((ab|b?)*w)</code>: <img src="http://i.imgur.com/KolYNn3.png" alt="example"></p>
+
+<h1>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO:</h1>
+
+<p>-test cases?
+-work on visualization of state machine </p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/ggilmore">ggilmore</a></p>
