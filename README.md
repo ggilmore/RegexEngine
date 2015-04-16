@@ -10,10 +10,10 @@ This is a simple regex engine written in Scala that I made following [this artic
      <regex> ::= <term> '|' <regex>
              ::=  <term>
      
-     <term> ::= <factor>+
+     <term>  ::= <factor>+
      
      <factor> ::= <factor> ('*'| '?'|'+')?
-             ::= <base> ('*'| '?'|'+')?
+              ::= <base> ('*'| '?'|'+')?
      
      <base>  ::= <char>
              ::=  '\' <char>
