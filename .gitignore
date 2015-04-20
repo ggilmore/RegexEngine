@@ -50,3 +50,5 @@ crashlytics-build.properties
 
 
 target/
+project/target/
+src/main/scala/com/ggilmore/core/TestThing.scala
