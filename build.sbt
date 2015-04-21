@@ -6,4 +6,5 @@ organization := "com.github.ggilmore"
 
 scalaVersion := "2.11.6"
 
+enablePlugins(ScalaJSPlugin)
 

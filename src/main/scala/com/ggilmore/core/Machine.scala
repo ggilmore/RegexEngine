@@ -13,8 +13,6 @@ case class State(description:String, id:UUID  = UUID.randomUUID){
 }
 
 
-
-
 /**
  * A class that represents a series of states and transitions from one state to another that is designed to test
  * input strings to see if they match the regex that this class is supposed to represent (and no other regex).
@@ -85,7 +83,7 @@ object Machine {
   /**
    * Generates a machine that matches a single character 'char'
    * @param singleCharString the character that we want to match
-   * @return a machine that matches 'char' and nothing else
+   * @return a machine that matches 'singleCharString' and nothing else
    */
   def singleChar(singleCharString: String): Machine = {
     require(singleCharString.length == 1)
@@ -168,10 +166,11 @@ object Machine {
    *         targettarget, or targettargettarget, i.e. target*
    */
   def someOrNone(target: Machine): Machine = {
-   val tempMachine = oneOrMore(target)
-    val prevTransitions:Set[State] = tempMachine.nTransitions(tempMachine.initialState)
-    Machine(tempMachine.initialState, tempMachine.finalState,
-      tempMachine.nTransitions + (tempMachine.initialState -> (prevTransitions + tempMachine.finalState)) ,
-      tempMachine.dTransitions)
+//   val tempMachine = oneOrMore(target)
+//    val prevTransitions:Set[State] = tempMachine.nTransitions(tempMachine.initialState)
+//    Machine(tempMachine.initialState, tempMachine.finalState,
+//      tempMachine.nTransitions + (tempMachine.initialState -> (prevTransitions + tempMachine.finalState)) ,
+//      tempMachine.dTransitions)
+    oneOrMore(zeroOrOne(target))
   }
 }
